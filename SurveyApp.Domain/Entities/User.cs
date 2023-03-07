@@ -1,4 +1,5 @@
 ﻿using SurveyApp.Common.Enums;
+using System.Collections.Generic;
 
 namespace SurveyApp.Domain.Entities
 {
@@ -11,5 +12,8 @@ namespace SurveyApp.Domain.Entities
 		//		 Might be used to form target groups for questionnaires.
 		//		 Ideally would be implemented as separate independant table with many-to-many connection.
 		public string? Topic { get; set; }
+
+		public IEnumerable<Questionnaire> OwnedQuestionnaires { get; set; }
+		public IEnumerable<QuestionnaireSubmission> AttendedQuestionnaires { get; set; }
 	}
 }

@@ -12,6 +12,9 @@ namespace SurveyApp.API.DAL
 	public class SurveyDbContext : DbContext
 	{
 		public DbSet<Questionnaire> Questionnaires { get; set; }
+		public DbSet<QuestionnaireItem> QuestionnaireItems { get; set; }
+		public DbSet<QuestionnaireSubmission> QuestionnaireSubmissions { get; set; }
+		public DbSet<QuestionnaireAnswer> QuestionnaireAnswers { get; set; }
 		public DbSet<User> Users { get; set; }
 
 		public SurveyDbContext(DbContextOptions<SurveyDbContext> dbOptions)
@@ -24,6 +27,7 @@ namespace SurveyApp.API.DAL
 			modelBuilder.UseSerialColumns();
 
 			ConfigureCreatedDateProperty(modelBuilder);
+			ConfigureCompositeKeys(modelBuilder);
 
 			modelBuilder.HasDefaultSchema("public");
 			base.OnModelCreating(modelBuilder);
@@ -105,6 +109,15 @@ namespace SurveyApp.API.DAL
 					createdDateUtcProperty.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 				}
 			}
+		}
+
+		private void ConfigureCompositeKeys(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<QuestionnaireSubmission>()
+				.HasKey(e => new { e.QuestionnaireId, e.ParticipantId });
+
+			modelBuilder.Entity<QuestionnaireAnswer>()
+				.HasKey(e => new { e.QuestionnaireItemId, e.QuestionnaireSubmissionId });
 		}
 	}
 }
