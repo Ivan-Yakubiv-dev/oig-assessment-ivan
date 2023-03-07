@@ -1,3 +1,5 @@
+using System;
+
 namespace SurveyApp.Blazor.Data
 {
 	public class WeatherForecast
