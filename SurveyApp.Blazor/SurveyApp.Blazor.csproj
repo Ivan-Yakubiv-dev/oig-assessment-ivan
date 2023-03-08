@@ -6,4 +6,8 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\SurveyApp.DtoModels\SurveyApp.DtoModels.csproj" />
+	</ItemGroup>
+	
 </Project>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SurveyApp.API.Services.Interfaces;
@@ -22,6 +23,15 @@ namespace SurveyApp.API.Controllers
 		{
 			return await _questionnaireService.Get(filterParams)
 				.ConfigureAwait(false);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		public PublicQuestionnaireDto Create(CreateQuestionnaireDto questionnaireInput)
+		{
+			questionnaireInput.ValidateModel();
+
+			return _questionnaireService.Create(questionnaireInput, CurrentUserId);
 		}
 	}
 }

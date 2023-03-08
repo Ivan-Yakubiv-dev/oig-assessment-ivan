@@ -4,6 +4,10 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>warnings</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
-	</PropertyGroup> 
+	</PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+	</ItemGroup>
+	
 </Project>

@@ -2,8 +2,7 @@
 
 namespace SurveyApp.Common.Exceptions
 {
-	// NOTE: Ideally, this class should be abstract and inherited by custom classes per exception type (status code)
-	public class SABaseException : Exception
+	public abstract class SABaseException : Exception
 	{
 		public int StatusCode { get; private set; }
 		// NOTE: PublicMessage property could be used as response message (if needed) in client-server requests,

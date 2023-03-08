@@ -10,6 +10,9 @@ namespace SurveyApp.API.Services
 {
 	public class QuestionnaireService : IQuestionnaireService
 	{
+		// NOTE: For more solid project structure DbContext should not be used from within Services layer,
+		//		 in order to follow some sort of "single responsibility" principle.
+		//		 In current state of project it is done for simplification and it worths only for proof-of-concept solutions.
 		protected readonly SurveyDbContext _dbContext;
 
 		public QuestionnaireService(SurveyDbContext dbContext)
@@ -29,7 +32,17 @@ namespace SurveyApp.API.Services
 				.ToListAsync()
 				.ConfigureAwait(false);
 
-			return entities.Select(e => new PublicQuestionnaireDto(e));
+			return entities.Select(e => EntityMapper.MapQuestionnaireFromEntity(e));
+		}
+
+		public PublicQuestionnaireDto Create(CreateQuestionnaireDto questionnaireInput, string currentUserId)
+		{
+			var entity = EntityMapper.MapQuestionnaireToEntity(questionnaireInput, currentUserId);
+
+			_dbContext.Questionnaires.Add(entity);
+			_dbContext.SaveChanges();
+
+			return EntityMapper.MapQuestionnaireFromEntity(entity);
 		}
 	}
 }

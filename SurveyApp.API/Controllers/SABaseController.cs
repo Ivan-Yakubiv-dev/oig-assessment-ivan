@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -16,23 +15,20 @@ namespace SurveyApp.API.Controllers
 	[Route("Api/[Controller]")]
 	public abstract class SABaseController : ControllerBase
 	{
-		// NOTE: In real scenario _userId value should be null here, "U_01" here is just a mock to avoid exceptions
-		private string? _userId = "U_01";
-		public string UserId
+		// NOTE: In real scenario _currentUserId should have default null value here, "U_01" here is just a mock to avoid exceptions
+		private string? _currentUserId = "U_01";
+		public string CurrentUserId
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(_userId))
+				if (string.IsNullOrEmpty(_currentUserId))
 				{
 					// NOTE: NameIdentifier claim type is used as example and has no meaning in a current state of system
-					_userId = User.Claims.FirstOrDefault(n => n.Type == ClaimTypes.NameIdentifier)?.Value
-						?? throw new SABaseException(
-							StatusCodes.Status403Forbidden,
-							ErrorConsts.UserClaimsInvalidInternalError,
-							ErrorConsts.NoAccessPublicError);
+					_currentUserId = User.Claims.FirstOrDefault(n => n.Type == ClaimTypes.NameIdentifier)?.Value
+						?? throw new SAForbiddenException(ErrorConsts.UserClaimsInvalidInternalError, ErrorConsts.NoAccessPublicError);
 				}
 
-				return _userId;
+				return _currentUserId;
 			}
 		}
 
@@ -48,14 +44,13 @@ namespace SurveyApp.API.Controllers
 		[NonAction]
 		public void OnActionExecuting(ActionExecutingContext context)
 		{
-			_logger.LogInformation($"API request from user '{UserId}'");
+			_logger.LogInformation($"API request from user '{CurrentUserId}'");
 
 			if (!ModelState.IsValid)
 			{
 				var modelStateError = new SerializableError(context.ModelState);
 
-				var exception = new SABaseException(
-					StatusCodes.Status400BadRequest,
+				var exception = new SABadRequestException(
 					string.Join(Environment.NewLine, modelStateError),
 					ErrorConsts.ViewModelInvalidPublicError);
 

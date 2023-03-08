@@ -32,8 +32,7 @@ namespace SurveyApp.API.DAL
 
 			if (sortingProp == null)
 			{
-				throw new SABaseException(
-					StatusCodes.Status400BadRequest,
+				throw new SABadRequestException(
 					$"Entities of type '{typeof(T).Name}' does not have property '{filterParams.SortBy}' to be sorted by.",
 					ErrorConsts.WrongFilterParamsPublicError);
 			}
