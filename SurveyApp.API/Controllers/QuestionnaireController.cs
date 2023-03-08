@@ -33,5 +33,30 @@ namespace SurveyApp.API.Controllers
 
 			return _questionnaireService.Create(questionnaireInput, CurrentUserId);
 		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPut("Schedule")]
+		public PublicQuestionnaireDto Schedule(UpdateQuestionnaireTimeRangeDto questionnaireInput)
+		{
+			questionnaireInput.ValidateModel();
+
+			return _questionnaireService.Schedule(questionnaireInput, CurrentUserId);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPut("Reschedule")]
+		public PublicQuestionnaireDto Reschedule(UpdateQuestionnaireTimeRangeDto questionnaireInput)
+		{
+			questionnaireInput.ValidateModel();
+
+			return _questionnaireService.Reschedule(questionnaireInput, CurrentUserId);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPut("{questionnaireId}/Close")]
+		public PublicQuestionnaireDto Close(int questionnaireId)
+		{
+			return _questionnaireService.Close(questionnaireId, CurrentUserId);
+		}
 	}
 }
