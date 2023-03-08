@@ -10,13 +10,14 @@ using System.Security.Claims;
 
 namespace SurveyApp.API.Controllers
 {
-	[Authorize]
+	// NOTE: [Authorize] attribute commented as long as authorization is mocked in current state of the system
+	//[Authorize]
 	[Route("Api/[Controller]")]
 	[ApiController]
 	public abstract class SABaseController : ControllerBase
 	{
 		// NOTE: In real scenario _currentUserId should have default null value here, "U_01" here is just a mock to avoid exceptions
-		private string? _currentUserId = "U_01";
+		private string? _currentUserId = MockConsts.MockAdminId;
 		public string CurrentUserId
 		{
 			get

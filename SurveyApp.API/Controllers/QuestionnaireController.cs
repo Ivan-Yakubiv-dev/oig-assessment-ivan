@@ -19,42 +19,46 @@ namespace SurveyApp.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IEnumerable<PublicQuestionnaireDto>> Get(FilterParams filterParams)
+		public async Task<IEnumerable<PublicQuestionnaireDto>> Get([FromQuery] FilterParams filterParams)
 		{
 			return await _questionnaireService.Get(filterParams)
 				.ConfigureAwait(false);
 		}
 
-		[Authorize(Roles = "Admin")]
+		// NOTE: [Authorize] attribute commented as long as authorization is mocked in current state of the system
+		//[Authorize(Roles = "Admin")]
 		[HttpPost]
-		public PublicQuestionnaireDto Create(CreateQuestionnaireDto questionnaireInput)
+		public PublicQuestionnaireDto Create([FromBody] CreateQuestionnaireDto questionnaireInput)
 		{
 			questionnaireInput.ValidateModel();
 
 			return _questionnaireService.Create(questionnaireInput, CurrentUserId);
 		}
 
-		[Authorize(Roles = "Admin")]
+		// NOTE: [Authorize] attribute commented as long as authorization is mocked in current state of the system
+		//[Authorize(Roles = "Admin")]
 		[HttpPut("Schedule")]
-		public PublicQuestionnaireDto Schedule(UpdateQuestionnaireTimeRangeDto questionnaireInput)
+		public PublicQuestionnaireDto Schedule([FromBody] UpdateQuestionnaireTimeRangeDto questionnaireInput)
 		{
 			questionnaireInput.ValidateModel();
 
 			return _questionnaireService.Schedule(questionnaireInput, CurrentUserId);
 		}
 
-		[Authorize(Roles = "Admin")]
+		// NOTE: [Authorize] attribute commented as long as authorization is mocked in current state of the system
+		//[Authorize(Roles = "Admin")]
 		[HttpPut("Reschedule")]
-		public PublicQuestionnaireDto Reschedule(UpdateQuestionnaireTimeRangeDto questionnaireInput)
+		public PublicQuestionnaireDto Reschedule([FromBody] UpdateQuestionnaireTimeRangeDto questionnaireInput)
 		{
 			questionnaireInput.ValidateModel();
 
 			return _questionnaireService.Reschedule(questionnaireInput, CurrentUserId);
 		}
 
-		[Authorize(Roles = "Admin")]
+		// NOTE: [Authorize] attribute commented as long as authorization is mocked in current state of the system
+		//[Authorize(Roles = "Admin")]
 		[HttpPut("{questionnaireId}/Close")]
-		public PublicQuestionnaireDto Close(int questionnaireId)
+		public PublicQuestionnaireDto Close([FromRoute] int questionnaireId)
 		{
 			return _questionnaireService.Close(questionnaireId, CurrentUserId);
 		}

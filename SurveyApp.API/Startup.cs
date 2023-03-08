@@ -21,7 +21,7 @@ namespace SurveyApp.API
 			_environment = environment;
 		}
 
-		public void ConfigureApplication(IServiceCollection services)
+		public void ConfigureDatabase(IServiceCollection services)
 		{
 			string dbConnectionString = _configuration.GetConnectionString("dbConnString");
 			services.AddDbContext<SurveyDbContext>(options =>
@@ -31,7 +31,10 @@ namespace SurveyApp.API
 					opts.MigrationsAssembly("SurveyApp.API");
 					opts.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
 				}));
+		}
 
+		public void ConfigureApplication(IServiceCollection services)
+		{
 			services.AddControllers();
 
 			services.AddEndpointsApiExplorer();
@@ -41,6 +44,8 @@ namespace SurveyApp.API
 
 		public void ConfigureDI(IServiceCollection services)
 		{
+			services.AddTransient<DefaultDataSeeder>();
+
 			services.AddScoped<IQuestionnaireService, QuestionnaireService>();
 		}
 
@@ -66,6 +71,15 @@ namespace SurveyApp.API
 			webApp.UseAuthorization();
 
 			webApp.MapControllers();
+		}
+
+		public void SeedDefaultData(WebApplication webApp)
+		{
+			using (var scope = webApp.Services.CreateScope())
+			{
+				var dataSeeder = scope.ServiceProvider.GetRequiredService<DefaultDataSeeder>();
+				dataSeeder.Seed();
+			}
 		}
 	}
 }

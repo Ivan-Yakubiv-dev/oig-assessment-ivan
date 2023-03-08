@@ -4,6 +4,8 @@ namespace SurveyApp.Domain.Entities
 {
 	public class QuestionnaireSubmission : SABaseEntity
 	{
+		public int Id { get; set; }
+
 		public int QuestionnaireId { get; set; }
 		public Questionnaire Questionnaire { get; set; }
 

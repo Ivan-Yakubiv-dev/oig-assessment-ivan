@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General repo items", "Gener
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9F8414A2-17B5-4A2C-BD45-2520B3578BD4}"
 	ProjectSection(SolutionItems) = preProject
+		Docs\Database schema.png = Docs\Database schema.png
 		Docs\Diagrams.md = Docs\Diagrams.md
 		Docs\Requirements.md = Docs\Requirements.md
 	EndProjectSection
