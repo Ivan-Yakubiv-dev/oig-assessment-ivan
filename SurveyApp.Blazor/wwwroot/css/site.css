@@ -63,8 +63,26 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-.survey-row:hover {
-    background-color: #d1d1d1;
+.survey-header {
     cursor: pointer;
-    border-radius: 5px;
+}
+
+    .survey-header .oi {
+        margin-right: 10px;
+    }
+
+.survey-row {
+    cursor: pointer;
+}
+
+.input-form {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+}
+
+.input-block {
+    display: flex;
+    flex-direction: column;
 }

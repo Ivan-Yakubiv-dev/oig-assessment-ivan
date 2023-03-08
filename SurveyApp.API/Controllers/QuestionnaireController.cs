@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SurveyApp.API.Services.Interfaces;
@@ -22,6 +21,13 @@ namespace SurveyApp.API.Controllers
 		public async Task<IEnumerable<PublicQuestionnaireDto>> Get([FromQuery] FilterParams filterParams)
 		{
 			return await _questionnaireService.Get(filterParams)
+				.ConfigureAwait(false);
+		}
+
+		[HttpGet("{questionnaireId}")]
+		public async Task<PublicQuestionnaireDto> GetById([FromRoute] int questionnaireId)
+		{
+			return await _questionnaireService.Get(questionnaireId)
 				.ConfigureAwait(false);
 		}
 

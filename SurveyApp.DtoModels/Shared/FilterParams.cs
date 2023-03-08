@@ -9,5 +9,27 @@
 		public bool IfSortAsc { get; set; }
 
 		public string FilterTerm { get; set; }
+
+		public string GenereateQueryParams()
+		{
+			string queryParams = $"?page={Page}&pageSize={PageSize}";
+
+			if (!string.IsNullOrEmpty(SortBy))
+			{
+				queryParams += $"&sortBy={SortBy}";
+			}
+
+			if (!string.IsNullOrEmpty(SortBy))
+			{
+				queryParams += $"&ifSortAsc={IfSortAsc}";
+			}
+
+			if (!string.IsNullOrWhiteSpace(FilterTerm))
+			{
+				queryParams += $"&filterTerm={FilterTerm}";
+			}
+
+			return queryParams;
+		}
 	}
 }

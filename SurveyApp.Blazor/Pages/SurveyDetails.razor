@@ -1,9 +1,23 @@
-﻿@page "/questionnaire"
+﻿@page "/questionnaire/{QuestionnaireId}"
 
 <PageTitle>Questionnaire</PageTitle>
 
+@using SurveyApp.Blazor.Services
+@using SurveyApp.DtoModels
+@inject QuestionnaireApiService QuestionnaireApiService
+
 <h1>Questionnaire form should be somewhere here...</h1>
 
-@code {
+<p>@(_questionnaire != null ? _questionnaire.Name : "Loading...")</p>
 
+@code {
+	[Parameter]
+	public string QuestionnaireId { get; set; }
+
+    private PublicQuestionnaireDto _questionnaire;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_questionnaire = await QuestionnaireApiService.GetQuestionnaire(QuestionnaireId);
+	}
 }

@@ -32,7 +32,7 @@ namespace SurveyApp.Blazor
 
 			services.AddHttpClient<QuestionnaireApiService>(client =>
 			{
-				client.BaseAddress = new Uri($"{surveyAppApiUrl}/Questionnaire");
+				client.BaseAddress = new Uri(surveyAppApiUrl);
 			});
 		}
 

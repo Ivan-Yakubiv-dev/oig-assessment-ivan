@@ -10,27 +10,39 @@
 
 <h1>Available questionnaires:</h1>
 
-@if (questionnaires == null)
+@if (_questionnaires == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
+    <table class="table table-hover">
+        <thead class="thead-dark">
             <tr>
-                <th>Questionnaire title</th>
-                <th>Start date/time</th>
-                <th>End date/time</th>
-                <th>Current state</th>
+                <th class="survey-header" @onclick="@(() => ChangeSortParams("StartTimeUtc"))">
+                    <span class="mr- oi @(_filterParams.SortBy != "StartTimeUtc" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    Start date/time
+                </th>
+                <th class="survey-header" @onclick="@(() => ChangeSortParams("Name"))">
+                    <span class="oi @(_filterParams.SortBy != "Name" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    Questionnaire title
+                </th>
+                <th class="survey-header" @onclick="@(() => ChangeSortParams("EndTimeUtc"))">
+                    <span class="oi @(_filterParams.SortBy != "EndTimeUtc" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    End date/time
+                </th>
+                <th class="survey-header" @onclick="@(() => ChangeSortParams("Status"))">
+                    <span class="oi @(_filterParams.SortBy != "Status" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    Current state
+                </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var survey in questionnaires)
+            @foreach (var survey in _questionnaires)
             {
                 <tr class="survey-row" @onclick="() => GoToQuestionnaireDetails(survey.Id)">
-                    <td>@survey.Name</td>
                     <td>@survey.StartTimeUtc.GetValueOrDefault().ToString("yy-MMM-dd HH:mm")</td>
+                    <td>@survey.Name</td>
                     <td>@survey.EndTimeUtc.GetValueOrDefault().ToString("yy-MMM-dd HH:mm")</td>
                     <td><span class="badge @GenerateLabelClass(survey.Status)">@survey.Status</span></td>
                 </tr>
@@ -40,11 +52,22 @@ else
 }
 
 @code {
-    private PublicQuestionnaireDto[]? questionnaires;
+    private PublicQuestionnaireDto[] _questionnaires;
+    private FilterParams _filterParams;
 
     protected override async Task OnInitializedAsync()
     {
-        questionnaires = await QuestionnaireApiService.GetQuestionnaires();
+        _filterParams = new FilterParams
+        {
+            SortBy = nameof(PublicQuestionnaireDto.StartTimeUtc)
+        };
+
+        await RetrieveQuestionnaires();
+    }
+
+    private async Task RetrieveQuestionnaires()
+    {
+        _questionnaires = await QuestionnaireApiService.GetQuestionnaires(_filterParams);    
     }
 
     private void GoToQuestionnaireDetails(int questionnaireId)
@@ -67,5 +90,20 @@ else
             default:
                 return "badge-default";
         }
+    }
+
+    private async Task ChangeSortParams(string propertyName)
+    {
+        if (_filterParams.SortBy == propertyName)
+        {
+            _filterParams.IfSortAsc = !_filterParams.IfSortAsc;
+        }
+        else
+        {
+            _filterParams.SortBy = propertyName;
+            _filterParams.IfSortAsc = false;
+        }
+
+        await RetrieveQuestionnaires();
     }
 }

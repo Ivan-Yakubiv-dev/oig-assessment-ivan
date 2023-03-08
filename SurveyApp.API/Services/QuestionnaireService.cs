@@ -39,6 +39,15 @@ namespace SurveyApp.API.Services
 			return entities.Select(e => EntityMapper.MapQuestionnaireFromEntity(e));
 		}
 
+		public async Task<PublicQuestionnaireDto> Get(int questionnaireId)
+		{
+			var entity = await _dbContext.Questionnaires
+				.FirstOrDefaultAsync(e => e.Id == questionnaireId)
+				.ConfigureAwait(false);
+
+			return EntityMapper.MapQuestionnaireFromEntity(entity);
+		}
+
 		public PublicQuestionnaireDto Create(CreateQuestionnaireDto questionnaireInput, string currentUserId)
 		{
 			var entity = EntityMapper.MapQuestionnaireToEntity(questionnaireInput, currentUserId);

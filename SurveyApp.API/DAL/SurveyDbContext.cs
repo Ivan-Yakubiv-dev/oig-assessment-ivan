@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurveyApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace SurveyApp.API.DAL
 			modelBuilder.UseSerialColumns();
 
 			ConfigureCreatedDateProperty(modelBuilder);
+			ConfigureDateTimeConverters(modelBuilder);
 
 			modelBuilder.HasDefaultSchema("public");
 			base.OnModelCreating(modelBuilder);
@@ -106,6 +108,39 @@ namespace SurveyApp.API.DAL
 				if (createdDateUtcProperty != null)
 				{
 					createdDateUtcProperty.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+				}
+			}
+		}
+
+		private void ConfigureDateTimeConverters(ModelBuilder modelBuilder)
+		{
+			IEnumerable<IMutableEntityType> entityTypes = modelBuilder.Model.GetEntityTypes();
+
+			var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+				v => v.ToUniversalTime(),
+				v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+			var nullableDateTimeConverter = new ValueConverter<DateTime?, DateTime?>(
+				v => v.HasValue ? v.Value.ToUniversalTime() : v,
+				v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+			foreach (var entityType in entityTypes)
+			{
+				if (entityType.IsKeyless)
+				{
+					continue;
+				}
+
+				foreach (var property in entityType.GetProperties())
+				{
+					if (property.ClrType == typeof(DateTime))
+					{
+						property.SetValueConverter(dateTimeConverter);
+					}
+					else if (property.ClrType == typeof(DateTime?))
+					{
+						property.SetValueConverter(nullableDateTimeConverter);
+					}
 				}
 			}
 		}
