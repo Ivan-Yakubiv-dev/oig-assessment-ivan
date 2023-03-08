@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using SurveyApp.Common.Constants;
 using SurveyApp.Common.Exceptions;
 using SurveyApp.Domain.Entities;

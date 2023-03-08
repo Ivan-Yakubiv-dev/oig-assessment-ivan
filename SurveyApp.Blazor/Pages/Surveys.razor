@@ -1,0 +1,71 @@
+﻿@page "/surveys"
+
+<PageTitle>Surveys overview</PageTitle>
+
+@using SurveyApp.Blazor.Services
+@using SurveyApp.Common.Enums
+@using SurveyApp.DtoModels
+@inject QuestionnaireApiService QuestionnaireApiService
+@inject NavigationManager NavigationManager
+
+<h1>Available questionnaires:</h1>
+
+@if (questionnaires == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Questionnaire title</th>
+                <th>Start date/time</th>
+                <th>End date/time</th>
+                <th>Current state</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var survey in questionnaires)
+            {
+                <tr class="survey-row" @onclick="() => GoToQuestionnaireDetails(survey.Id)">
+                    <td>@survey.Name</td>
+                    <td>@survey.StartTimeUtc.GetValueOrDefault().ToString("yy-MMM-dd HH:mm")</td>
+                    <td>@survey.EndTimeUtc.GetValueOrDefault().ToString("yy-MMM-dd HH:mm")</td>
+                    <td><span class="badge @GenerateLabelClass(survey.Status)">@survey.Status</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private PublicQuestionnaireDto[]? questionnaires;
+
+    protected override async Task OnInitializedAsync()
+    {
+        questionnaires = await QuestionnaireApiService.GetQuestionnaires();
+    }
+
+    private void GoToQuestionnaireDetails(int questionnaireId)
+    {
+        NavigationManager.NavigateTo($"questionnaire/{questionnaireId}");
+    }
+
+    private string GenerateLabelClass(SurveyStatus status)
+    {
+        switch (status)
+        {
+            case SurveyStatus.Concept:
+                return "badge-primary";
+            case SurveyStatus.Scheduled:
+                return "badge-warning";
+            case SurveyStatus.Active:
+                return "badge-danger";
+            case SurveyStatus.Completed:
+                return "badge-success";
+            default:
+                return "badge-default";
+        }
+    }
+}

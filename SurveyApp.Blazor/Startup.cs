@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SurveyApp.Blazor.Data;
+using SurveyApp.Blazor.Services;
+using System;
 
 namespace SurveyApp.Blazor
 {
 	public class Startup
 	{
-		// TODO: use app configurations to set up database connection and typed options injection
 		private readonly IConfiguration _configuration;
 		private readonly IWebHostEnvironment _environment;
 		private bool _isDevelopmentEnv => _environment.EnvironmentName == "Development";
@@ -28,7 +28,12 @@ namespace SurveyApp.Blazor
 
 		public void ConfigureDI(IServiceCollection services)
 		{
-			services.AddSingleton<WeatherForecastService>();
+			var surveyAppApiUrl = _configuration.GetSection("SurveyAppAPI").GetValue<string>("BaseUrl");
+
+			services.AddHttpClient<QuestionnaireApiService>(client =>
+			{
+				client.BaseAddress = new Uri($"{surveyAppApiUrl}/Questionnaire");
+			});
 		}
 
 		public void ConfigureMiddlewares(WebApplication webApp)
