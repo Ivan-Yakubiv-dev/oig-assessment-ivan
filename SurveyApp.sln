@@ -13,8 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9F8414A2-17B5-4A2C-BD45-2520B3578BD4}"
 	ProjectSection(SolutionItems) = preProject
 		Docs\Database schema.png = Docs\Database schema.png
-		Docs\Diagrams.md = Docs\Diagrams.md
-		Docs\Requirements.md = Docs\Requirements.md
+		Docs\Flows.md = Docs\Flows.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurveyApp.Blazor", "SurveyApp.Blazor\SurveyApp.Blazor.csproj", "{5DE56A7B-E5B0-49F3-B1F7-63BF97AB9C19}"
