@@ -1,6 +1,6 @@
 ﻿@page "/create-survey"
 
-<PageTitle>Survey creation</PageTitle>
+<PageTitle>Create survey</PageTitle>
 
 @using SurveyApp.Blazor.Services
 @using SurveyApp.DtoModels
@@ -9,7 +9,7 @@
 
 <h1>Fill in data to create new questionnaire</h1>
 
-<div class="input-form">
+<div class="inputs-wrapper">
 	<div class="input-block">
 		<label for="name_input">Survey title <span class="text-danger font-weight-bold">*</span></label>
 		<input type="text" id="name_input" class="form-control" @bind-value="_questionnaireInput.Name" placeholder="fill in title..." />

@@ -3,12 +3,44 @@
 <PageTitle>Questionnaire</PageTitle>
 
 @using SurveyApp.Blazor.Services
+@using SurveyApp.Common.Enums
 @using SurveyApp.DtoModels
 @inject QuestionnaireApiService QuestionnaireApiService
 
-<h1>Questionnaire form should be somewhere here...</h1>
+@if (_questionnaire == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+	@if (_questionnaire.Status == SurveyStatus.Active)
+	{
+		<h2 class="text-success">To start answering a survey click a button below</h2>
+		// NOTE: This button is a stub for answering screen, on next stages of development it would navigate to a page with list of questions
+		<button class="btn btn-primary">Lets answer!</button>
+	}
+	else
+	{
+		<h2 class="text-warning">Questionnaire is not ready to be answered...</h2>
+	}
 
-<p>@(_questionnaire != null ? _questionnaire.Name : "Loading...")</p>
+	<div class="details-wrapper">
+		<div class="details-block">
+			<label class="font-weight-bold">Survey title</label>
+			<span>@_questionnaire.Name</span>
+		</div>
+
+		<div class="details-block">
+			<label class="font-weight-bold">Survey start date/time</label>
+			<span>@_questionnaire.StartTimeUtc</span>
+		</div>
+
+		<div class="details-block">
+			<label class="font-weight-bold">Survey end date/time</label>
+			<span>@_questionnaire.EndTimeUtc</span>
+		</div>
+	</div>
+}
 
 @code {
 	[Parameter]
