@@ -62,3 +62,48 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.survey-header .oi {
+    margin-right: 10px;
+}
+
+.inputs-wrapper {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+}
+
+    .inputs-wrapper .input-block {
+        display: flex;
+        flex-direction: column;
+    }
+
+.details-wrapper {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+}
+
+    .details-wrapper .details-block {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 30px;
+        background-color: #212529;
+        border-radius: 5px;
+        color: #fff;
+    }
+
+.search-input {
+    max-width: 400px;
+}
+
+    .search-input .oi {
+        top: 0;
+        font-size: 20px;
+    }

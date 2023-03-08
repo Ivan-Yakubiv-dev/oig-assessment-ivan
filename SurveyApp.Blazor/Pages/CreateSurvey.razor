@@ -1,0 +1,45 @@
+﻿@page "/create-survey"
+
+<PageTitle>Create survey</PageTitle>
+
+@using SurveyApp.Blazor.Services
+@using SurveyApp.DtoModels
+@inject QuestionnaireApiService QuestionnaireApiService
+@inject NavigationManager NavigationManager
+
+<h1>Fill in data to create new questionnaire</h1>
+
+<div class="inputs-wrapper">
+	<div class="input-block">
+		<label for="name_input">Survey title <span class="text-danger font-weight-bold">*</span></label>
+		<input type="text" id="name_input" class="form-control" @bind-value="_questionnaireInput.Name" placeholder="fill in title..." />
+	</div>
+
+	<div class="input-block">
+		<label for="topic_input">Survey topic <span class="text-muted font-weight-light">(optional)</span></label>
+		<input type="text" id="topic_input" class="form-control" @bind-value="_questionnaireInput.Topic" placeholder="fill in topic..." />
+	</div>
+
+	<div class="input-block">
+		<label for="start_time_input">Survey start date/time <span class="text-muted font-weight-bold">(optional)</span></label>
+		<input type="datetime" id="start_time_input" class="form-control" @bind-value="_questionnaireInput.StartTimeUtc" placeholder="select date and time..." />
+	</div>
+
+	<div class="input-block">
+		<label for="end_time_input">Survey end date/time <span class="text-muted font-weight-bold">(optional)</span></label>
+		<input type="datetime" id="end_time_input" class="form-control" @bind-value="_questionnaireInput.EndTimeUtc" placeholder="select date and time..." />
+	</div>
+</div>
+
+<button class="btn btn-primary" @onclick="CreateQuestionnaire">Submit</button>
+
+@code {
+	private CreateQuestionnaireDto _questionnaireInput = new CreateQuestionnaireDto();
+
+	private async Task CreateQuestionnaire()
+	{
+		var createdQuestionnaire = await QuestionnaireApiService.CreateQuestionnaire(_questionnaireInput);
+
+        NavigationManager.NavigateTo($"questionnaire/{createdQuestionnaire.Id}");
+	}
+}

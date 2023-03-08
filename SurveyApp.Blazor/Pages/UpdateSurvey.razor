@@ -1,0 +1,109 @@
+﻿@page "/update-survey/{QuestionnaireId}"
+
+<PageTitle>Update survey</PageTitle>
+
+@using SurveyApp.Blazor.Services
+@using SurveyApp.Common.Enums
+@using SurveyApp.DtoModels
+@inject QuestionnaireApiService QuestionnaireApiService
+@inject NavigationManager NavigationManager
+
+<!-- NOTE: Content of switch case blocks better be moved to separate components and inserted here -->
+@switch (_currentQuestionnaireStatus)
+{
+	case SurveyStatus.Concept:
+	{
+		<h1>Fill in data to schedule questionnaire</h1>
+
+		<div class="inputs-wrapper">
+			<div class="input-block">
+				<label for="start_time_input">Survey start date/time <span class="text-danger font-weight-bold">*</span></label>
+				<input type="datetime" id="start_time_input" class="form-control" @bind-value="_questionnaireInput.StartTimeUtc" placeholder="select date and time..." />
+			</div>
+
+			<div class="input-block">
+				<label for="end_time_input">Survey end date/time <span class="text-danger font-weight-bold">*</span></label>
+				<input type="datetime" id="end_time_input" class="form-control" @bind-value="_questionnaireInput.EndTimeUtc" placeholder="select date and time..." />
+			</div>
+		</div>
+
+		<button class="btn btn-primary" @onclick="ScheduleQuestionnaire">Submit</button>
+
+		break;
+	}
+	case SurveyStatus.Scheduled:
+	{
+		<h1>Fill in data to reschedule questionnaire</h1>
+
+		<div class="inputs-wrapper">
+			<div class="input-block">
+				<label for="start_time_input">Survey start date/time <span class="text-danger font-weight-bold">*</span></label>
+				<input type="datetime" id="start_time_input" class="form-control" @bind-value="_questionnaireInput.StartTimeUtc" placeholder="select date and time..." />
+			</div>
+
+			<div class="input-block">
+				<label for="end_time_input">Survey end date/time <span class="text-danger font-weight-bold">*</span></label>
+				<input type="datetime" id="end_time_input" class="form-control" @bind-value="_questionnaireInput.EndTimeUtc" placeholder="select date and time..." />
+			</div>
+		</div>
+
+		<button class="btn btn-primary" @onclick="RescheduleQuestionnaire">Submit</button>
+
+		break;
+	}
+	case SurveyStatus.Active:
+	{
+		<h1>Are you sure you want to close questionnaire?</h1>
+
+		<button class="btn btn-primary" @onclick="CloseQuestionnaire">Submit</button>
+
+		break;
+	}
+	default:
+	{
+		<p><em>Loading...</em></p>
+
+		break;
+	}
+}
+
+@code {
+	[Parameter]
+	public string QuestionnaireId { get; set; }
+
+	private UpdateQuestionnaireTimeRangeDto _questionnaireInput;
+	private SurveyStatus _currentQuestionnaireStatus = SurveyStatus.Unknown;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_questionnaireInput = new UpdateQuestionnaireTimeRangeDto();
+
+		var questionnaire = await QuestionnaireApiService.GetQuestionnaire(QuestionnaireId);
+
+		_currentQuestionnaireStatus = questionnaire.Status;
+		_questionnaireInput.Id = questionnaire.Id;
+		_questionnaireInput.StartTimeUtc = questionnaire.StartTimeUtc.GetValueOrDefault();
+		_questionnaireInput.EndTimeUtc = questionnaire.EndTimeUtc.GetValueOrDefault();
+	}
+
+	private async Task ScheduleQuestionnaire()
+	{
+		var createdQuestionnaire = await QuestionnaireApiService.ScheduleQuestionnaire(_questionnaireInput);
+
+        NavigationManager.NavigateTo($"questionnaire/{createdQuestionnaire.Id}");
+	}
+
+	private async Task RescheduleQuestionnaire()
+	{
+		var createdQuestionnaire = await QuestionnaireApiService.RescheduleQuestionnaire(_questionnaireInput);
+
+        NavigationManager.NavigateTo($"questionnaire/{createdQuestionnaire.Id}");
+	}
+
+	private async Task CloseQuestionnaire()
+	{
+		var createdQuestionnaire = await QuestionnaireApiService.CloseQuestionnaire(QuestionnaireId);
+
+        NavigationManager.NavigateTo($"questionnaire/{createdQuestionnaire.Id}");
+	}
+}

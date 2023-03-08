@@ -12,13 +12,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General repo items", "Gener
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{9F8414A2-17B5-4A2C-BD45-2520B3578BD4}"
 	ProjectSection(SolutionItems) = preProject
-		Docs\Diagrams.md = Docs\Diagrams.md
-		Docs\Requirements.md = Docs\Requirements.md
+		Docs\Database schema.png = Docs\Database schema.png
+		Docs\Flows.md = Docs\Flows.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurveyApp.Blazor", "SurveyApp.Blazor\SurveyApp.Blazor.csproj", "{5DE56A7B-E5B0-49F3-B1F7-63BF97AB9C19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurveyApp.Blazor", "SurveyApp.Blazor\SurveyApp.Blazor.csproj", "{5DE56A7B-E5B0-49F3-B1F7-63BF97AB9C19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurveyApp.API", "SurveyApp.API\SurveyApp.API.csproj", "{C0769560-5876-4972-BC77-40966E00A678}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurveyApp.API", "SurveyApp.API\SurveyApp.API.csproj", "{C0769560-5876-4972-BC77-40966E00A678}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurveyApp.Domain", "SurveyApp.Domain\SurveyApp.Domain.csproj", "{F9DFAC65-0828-46F0-9C01-C6CDE574E39E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure layer", "Infrastructure layer", "{F4B52F32-9A9E-49D0-A00F-9E9D53C9500E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurveyApp.Common", "SurveyApp.Common\SurveyApp.Common.csproj", "{170F8CEB-99B7-4848-805A-037A6B8D24D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurveyApp.DtoModels", "SurveyApp.DtoModels\SurveyApp.DtoModels.csproj", "{DD7E396A-9D9E-4F16-9B1B-EED4A5F38812}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,9 +42,27 @@ Global
 		{C0769560-5876-4972-BC77-40966E00A678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0769560-5876-4972-BC77-40966E00A678}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0769560-5876-4972-BC77-40966E00A678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9DFAC65-0828-46F0-9C01-C6CDE574E39E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9DFAC65-0828-46F0-9C01-C6CDE574E39E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9DFAC65-0828-46F0-9C01-C6CDE574E39E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9DFAC65-0828-46F0-9C01-C6CDE574E39E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{170F8CEB-99B7-4848-805A-037A6B8D24D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{170F8CEB-99B7-4848-805A-037A6B8D24D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{170F8CEB-99B7-4848-805A-037A6B8D24D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{170F8CEB-99B7-4848-805A-037A6B8D24D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD7E396A-9D9E-4F16-9B1B-EED4A5F38812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD7E396A-9D9E-4F16-9B1B-EED4A5F38812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD7E396A-9D9E-4F16-9B1B-EED4A5F38812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD7E396A-9D9E-4F16-9B1B-EED4A5F38812}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C0769560-5876-4972-BC77-40966E00A678} = {F4B52F32-9A9E-49D0-A00F-9E9D53C9500E}
+		{F9DFAC65-0828-46F0-9C01-C6CDE574E39E} = {F4B52F32-9A9E-49D0-A00F-9E9D53C9500E}
+		{170F8CEB-99B7-4848-805A-037A6B8D24D5} = {F4B52F32-9A9E-49D0-A00F-9E9D53C9500E}
+		{DD7E396A-9D9E-4F16-9B1B-EED4A5F38812} = {F4B52F32-9A9E-49D0-A00F-9E9D53C9500E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4908212A-ED14-4C97-A64D-FF4751804969}

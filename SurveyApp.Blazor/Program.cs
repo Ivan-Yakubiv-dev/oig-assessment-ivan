@@ -1,31 +1,12 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using SurveyApp.Blazor.Data;
+using Microsoft.AspNetCore.Builder;
+using SurveyApp.Blazor;
 
-var builder = WebApplication.CreateBuilder(args);
+var webAppBuilder = WebApplication.CreateBuilder(args);
+var startup = new Startup(webAppBuilder.Configuration, webAppBuilder.Environment);
+startup.ConfigureApplication(webAppBuilder.Services);
+startup.ConfigureDI(webAppBuilder.Services);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+var webApp = webAppBuilder.Build();
+startup.ConfigureMiddlewares(webApp);
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-	app.UseExceptionHandler("/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
-
-app.Run();
+webApp.Run();

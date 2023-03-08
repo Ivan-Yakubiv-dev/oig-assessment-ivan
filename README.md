@@ -44,11 +44,10 @@ The following business-rules are applicable:
 A questionnaire is planned for the future and will be completed in the future.
 - The end date and time are at least one hour after the beginning date and time.
 - A questionnaire will always exist in one of the following states:
-- Concept: The questionnaire is intentionally inactive, and cannot be administered.
-- Scheduled: The start date and time of the questionnaire are in the future. No questions can be answered yet.
-Active: the questionnaire's start date and time are in the past, while its end date and time are in the future. Only in this state can the questions be answered.
-
-- Completed: The questionnaire's end date and time have passed. No more questions can be answered.
+1) Concept: The questionnaire is intentionally inactive, and cannot be administered.
+2) Scheduled: The start date and time of the questionnaire are in the future. No questions can be answered yet.
+3) Active: the questionnaire's start date and time are in the past, while its end date and time are in the future. Only in this state can the questions be answered.
+4) Completed: The questionnaire's end date and time have passed. No more questions can be answered.
 
 The mentioned statuses are sequential, never skip a step, and cannot be reversed.
 
@@ -57,9 +56,9 @@ Build at least the following screens:
 - Create-screen for a questionnaire
 - Update-screen for a questionnaire
 - Overview-screen of questionnaires
-  - Display at least the name, startdate/time and enddate/time
-  - Sort the overview-screen by startdate/time, enddate/time (by default)
-  - Create an intuitive search-function for questionnaires
+1) Display at least the name, startdate/time and enddate/time
+2) Sort the overview-screen by startdate/time, enddate/time (by default)
+3) Create an intuitive search-function for questionnaires
 - A stub for the "answering-screen"; it is in this stage sufficient to display the questionnaire status.
 
 ### Non-functionals

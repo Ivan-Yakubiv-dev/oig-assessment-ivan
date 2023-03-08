@@ -1,0 +1,131 @@
+﻿@page "/surveys"
+
+<PageTitle>Surveys overview</PageTitle>
+
+@using SurveyApp.Blazor.Services
+@using SurveyApp.Common.Enums
+@using SurveyApp.DtoModels
+@inject QuestionnaireApiService QuestionnaireApiService
+@inject NavigationManager NavigationManager
+
+<h1>Available questionnaires:</h1>
+
+@if (_questionnaires == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="d-flex">
+        <div class="search-input input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="input-group-text oi oi-magnifying-glass btn btn-default" @onclick="RetrieveQuestionnaires"></button>
+            </div>
+            <input type="text" class="form-control" placeholder="type and click to search..." @bind-value="_filterParams.FilterTerm">
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="cursor-pointer" @onclick="@(() => ChangeSortParams("StartTimeUtc"))">
+                    <span class="mr- oi @(_filterParams.SortBy != "StartTimeUtc" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    Start date/time
+                </th>
+                <th class="cursor-pointer" @onclick="@(() => ChangeSortParams("Name"))">
+                    <span class="oi @(_filterParams.SortBy != "Name" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    Questionnaire title
+                </th>
+                <th class="cursor-pointer" @onclick="@(() => ChangeSortParams("EndTimeUtc"))">
+                    <span class="oi @(_filterParams.SortBy != "EndTimeUtc" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    End date/time
+                </th>
+                <th class="cursor-pointer" @onclick="@(() => ChangeSortParams("Status"))">
+                    <span class="oi @(_filterParams.SortBy != "Status" ? "d-none" : _filterParams.IfSortAsc ? "oi-arrow-thick-top" : "oi-arrow-thick-bottom")"></span>
+                    Current state
+                </th>
+                <th class="cursor-pointer"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var survey in _questionnaires)
+            {
+                <tr class="cursor-pointer" @onclick="() => GoToQuestionnaireDetails(survey.Id)">
+                    <td>@survey.StartTimeUtc.GetValueOrDefault().ToString("dd-MMM-yyyy HH:mm")</td>
+                    <td>@survey.Name</td>
+                    <td>@survey.EndTimeUtc.GetValueOrDefault().ToString("dd-MMM-yyyy HH:mm")</td>
+                    <td><span class="badge @GenerateLabelClass(survey.Status)">@survey.Status</span></td>
+                    <td @onclick:stopPropagation="true" @onclick:preventDefault="true">
+                        @if (survey.Status == SurveyStatus.Concept || survey.Status == SurveyStatus.Scheduled || survey.Status == SurveyStatus.Active)
+                        {
+                            <button class="oi oi-pencil btn btn-success btn-lg" @onclick="() => GoToQuestionnaireUpdatePage(survey.Id)">Update</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private PublicQuestionnaireDto[] _questionnaires;
+    private FilterParams _filterParams;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _filterParams = new FilterParams
+        {
+            SortBy = nameof(PublicQuestionnaireDto.EndTimeUtc)
+        };
+
+        await RetrieveQuestionnaires();
+    }
+
+    private async Task RetrieveQuestionnaires()
+    {
+        _questionnaires = await QuestionnaireApiService.GetQuestionnaires(_filterParams)
+            .ConfigureAwait(false);
+    }
+
+    private void GoToQuestionnaireDetails(int questionnaireId)
+    {
+        NavigationManager.NavigateTo($"questionnaire/{questionnaireId}");
+    }
+
+    private void GoToQuestionnaireUpdatePage(int questionnaireId)
+    {
+        NavigationManager.NavigateTo($"update-survey/{questionnaireId}");
+    }
+
+    private string GenerateLabelClass(SurveyStatus status)
+    {
+        switch (status)
+        {
+            case SurveyStatus.Concept:
+                return "badge-primary";
+            case SurveyStatus.Scheduled:
+                return "badge-warning";
+            case SurveyStatus.Active:
+                return "badge-danger";
+            case SurveyStatus.Completed:
+                return "badge-success";
+            default:
+                return "badge-default";
+        }
+    }
+
+    private async Task ChangeSortParams(string propertyName)
+    {
+        if (_filterParams.SortBy == propertyName)
+        {
+            _filterParams.IfSortAsc = !_filterParams.IfSortAsc;
+        }
+        else
+        {
+            _filterParams.SortBy = propertyName;
+            _filterParams.IfSortAsc = false;
+        }
+
+        await RetrieveQuestionnaires();
+    }
+}

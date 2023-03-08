@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>warnings</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SurveyApp.Common\SurveyApp.Common.csproj" />
+	</ItemGroup>
+
+</Project>
