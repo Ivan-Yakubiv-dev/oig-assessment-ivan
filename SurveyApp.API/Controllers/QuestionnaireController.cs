@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SurveyApp.API.Controllers
 {
-	public abstract class QuestionnaireController : SABaseController
+	public class QuestionnaireController : SABaseController
 	{
 		private readonly IQuestionnaireService _questionnaireService;
 

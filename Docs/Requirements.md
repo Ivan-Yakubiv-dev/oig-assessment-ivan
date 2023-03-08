@@ -4,6 +4,12 @@ The following use cases are the foundation for the application:
 - As the owner of a scheduled questionnaire, I want to be able to reschedule the questionnaire as long as it has not started.
 - As the owner of an active questionnaire, I want to be able to close the questionnaire at will.
 
+### Static structure
+A questionnaire should at least consist of the following:
+- Name
+- Startdate/time
+- Enddate/time
+- Status
 
 ### Business rules
 The following business-rules are applicable:

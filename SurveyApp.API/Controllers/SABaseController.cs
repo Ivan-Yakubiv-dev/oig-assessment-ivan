@@ -11,8 +11,8 @@ using System.Security.Claims;
 namespace SurveyApp.API.Controllers
 {
 	[Authorize]
-	[ApiController]
 	[Route("Api/[Controller]")]
+	[ApiController]
 	public abstract class SABaseController : ControllerBase
 	{
 		// NOTE: In real scenario _currentUserId should have default null value here, "U_01" here is just a mock to avoid exceptions

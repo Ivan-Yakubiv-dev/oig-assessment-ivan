@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SurveyApp.API.DAL;
 using SurveyApp.API.Services;
 using SurveyApp.API.Services.Interfaces;
 
@@ -9,7 +11,6 @@ namespace SurveyApp.API
 {
 	public class Startup
 	{
-		// TODO: Use app configurations to set up database connection and typed options injection
 		private readonly IConfiguration _configuration;
 		private readonly IWebHostEnvironment _environment;
 		private bool _isDevelopmentEnv => _environment.EnvironmentName == "Development";
@@ -22,6 +23,15 @@ namespace SurveyApp.API
 
 		public void ConfigureApplication(IServiceCollection services)
 		{
+			string dbConnectionString = _configuration.GetConnectionString("dbConnString");
+			services.AddDbContext<SurveyDbContext>(options =>
+				options.UseNpgsql(dbConnectionString, opts =>
+				{
+					opts.CommandTimeout(600);
+					opts.MigrationsAssembly("SurveyApp.API");
+					opts.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+				}));
+
 			services.AddControllers();
 
 			services.AddEndpointsApiExplorer();
@@ -43,7 +53,12 @@ namespace SurveyApp.API
 			if (_isDevelopmentEnv)
 			{
 				webApp.UseSwagger();
-				webApp.UseSwaggerUI();
+				webApp.UseSwaggerUI(c =>
+				{
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "SurveyApp API V1");
+					// NOTE: Set Swagger UI at apps root
+					c.RoutePrefix = string.Empty;
+				});
 			}
 
 			webApp.UseHttpsRedirection();

@@ -27,7 +27,6 @@ namespace SurveyApp.API.DAL
 			modelBuilder.UseSerialColumns();
 
 			ConfigureCreatedDateProperty(modelBuilder);
-			ConfigureCompositeKeys(modelBuilder);
 
 			modelBuilder.HasDefaultSchema("public");
 			base.OnModelCreating(modelBuilder);
@@ -109,15 +108,6 @@ namespace SurveyApp.API.DAL
 					createdDateUtcProperty.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 				}
 			}
-		}
-
-		private void ConfigureCompositeKeys(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<QuestionnaireSubmission>()
-				.HasKey(e => new { e.QuestionnaireId, e.ParticipantId });
-
-			modelBuilder.Entity<QuestionnaireAnswer>()
-				.HasKey(e => new { e.QuestionnaireItemId, e.QuestionnaireSubmissionId });
 		}
 	}
 }
